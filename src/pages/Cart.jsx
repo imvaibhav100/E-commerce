@@ -1,10 +1,12 @@
 import { useEffect } from "react";
 import { Col, Container, Row } from "react-bootstrap";
 import { useDispatch, useSelector } from "react-redux";
+import { toast } from "react-toastify";
 import {
   addToCart,
   decreaseQty,
   deleteProduct,
+  clearCart,
 } from "../app/features/cart/cartSlice";
 
 const Cart = () => {
@@ -15,6 +17,16 @@ const Cart = () => {
     (price, item) => price + item.qty * item.price,
     0
   );
+
+  const handlePlaceOrder = () => {
+    if (cartList.length === 0) {
+      toast.error("Your cart is empty!");
+      return;
+    }
+    dispatch(clearCart());
+    toast.success("Order placed successfully! 🎉");
+  };
+
   useEffect(() => {
     window.scrollTo(0, 0);
     // if(CartItem.length ===0) {
@@ -83,6 +95,12 @@ const Cart = () => {
                 <h4>Total Price :</h4>
                 <h3>${totalPrice}.00</h3>
               </div>
+              <button 
+                className="buy-now-btn"
+                onClick={handlePlaceOrder}
+              >
+                Place Order
+              </button>
             </div>
           </Col>
         </Row>
